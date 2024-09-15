@@ -49,7 +49,7 @@ class HomeScreen extends StatelessWidget {
               Row(
                 children: [
                   const Text(
-                    "Welcome, Claire",
+                    "Welcome, Tilin",
                     style: TextStyle(
                         color: primaryDark,
                         fontSize: 28,

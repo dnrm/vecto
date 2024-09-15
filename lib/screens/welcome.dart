@@ -35,7 +35,7 @@ class WelcomeScreen extends StatelessWidget {
 
   Widget _buildTagline() {
     return Text(
-      'Get ahold of your subscriptions and never pay for something you don\'t need',
+      'Tap your worries away, and discover the world along the way.',
       style: TextStyle(
         fontSize: 16,
         color: Colors.grey[400],

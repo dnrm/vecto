@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:vecto/constants.dart';
+import 'package:http/http.dart' as http;
+import 'package:vecto/screens/report.dart';
 
 class NewTripPage extends StatefulWidget {
   const NewTripPage({super.key});
@@ -13,6 +17,80 @@ class _NewTripPageState extends State<NewTripPage> {
   final TextEditingController _peopleController = TextEditingController();
   final TextEditingController _departureController = TextEditingController();
   final TextEditingController _returnController = TextEditingController();
+
+  String trimMessage(String input) {
+    if (input.startsWith("{message:") && input.endsWith("}")) {
+      return input.substring(9, input.length - 1).trim();
+    }
+    return input;
+  }
+
+  String trimNumber(String input) {
+    if (input.startsWith("{price:") && input.endsWith("}")) {
+      return input.substring(7, input.length - 1).trim();
+    }
+    return input;
+  }
+
+  void createTrip(
+    destination,
+    people,
+    departureDate,
+    returnDate,
+    departureCity,
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse(
+          "http://127.0.0.1:5000/new_trip",
+        ),
+        body: json.encode(
+          {
+            "destinationCity": destination,
+            "departureDate": departureDate,
+            "arrivalDate": returnDate,
+            "departureCity": departureCity,
+            "numPeople": people,
+          },
+        ),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+      );
+      final report = trimMessage(json.decode(response.body).toString());
+
+      final priceResponse = await http.post(
+        Uri.parse(
+          "http://127.0.0.1:5000/find_price",
+        ),
+        body: json.encode(
+          {
+            "text": report,
+          },
+        ),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+      );
+      final price = trimNumber(json.decode(priceResponse.body).toString());
+
+      print(report);
+      print(price);
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ReportScreen(
+            report: report,
+          ),
+        ),
+      );
+    } catch (error) {
+      print(error);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,16 +297,14 @@ class _NewTripPageState extends State<NewTripPage> {
           ),
         ),
         onPressed: () {
-          print("""
-Departure: ${_departureController.text} 
-Destination: ${_destinationController.text}
-People: ${_peopleController.text}
-Return: ${_returnController.text}
-""");
-          print(_departureController.text);
-          print(_destinationController.text);
-          print(_peopleController.text);
-          print(_returnController.text);
+          print("Creating trip...");
+          createTrip(
+            _destinationController.text,
+            _peopleController.text,
+            _departureController.text,
+            _returnController.text,
+            "Monterrey, México",
+          );
         },
       ),
     );
