@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:vecto/constants.dart';
+import 'package:vecto/screens/new_trip.dart';
 
 import 'package:vecto/widgets/featured_destinations.dart';
+import 'package:vecto/widgets/popular_destinations.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -10,20 +12,30 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return const NewTripPage();
+              },
+            ),
+          );
+        },
         backgroundColor: primaryDark,
         foregroundColor: const Color.fromARGB(255, 26, 80, 87),
         child: const Icon(Icons.airplane_ticket_sharp),
       ),
       bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 47, 47, 47),
-          selectedItemColor: primaryLight,
-          unselectedItemColor: const Color.fromARGB(255, 88, 158, 167),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Plans'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ]),
+        backgroundColor: const Color.fromARGB(255, 47, 47, 47),
+        selectedItemColor: primaryLight,
+        unselectedItemColor: const Color.fromARGB(255, 88, 158, 167),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Plans'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
       backgroundColor: backgroundGrey,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -112,6 +124,10 @@ class HomeScreen extends StatelessWidget {
                 height: 20,
               ),
               const FeaturedDestinations(),
+              const SizedBox(
+                height: 20,
+              ),
+              const PopularDestinations(),
             ],
           ),
         ),
