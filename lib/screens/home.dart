@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vecto/constants.dart';
 import 'package:vecto/screens/new_trip.dart';
+import 'package:vecto/screens/plans.dart';
 
 import 'package:vecto/widgets/featured_destinations.dart';
 import 'package:vecto/widgets/popular_destinations.dart';
@@ -35,6 +36,18 @@ class HomeScreen extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.star), label: 'Plans'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
+        onTap: (index) {
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const PlansPage();
+                },
+              ),
+            );
+          }
+        },
       ),
       backgroundColor: backgroundGrey,
       body: SafeArea(
@@ -49,7 +62,7 @@ class HomeScreen extends StatelessWidget {
               Row(
                 children: [
                   const Text(
-                    "Welcome, Tilin",
+                    "Welcome, Pinwinasio",
                     style: TextStyle(
                         color: primaryDark,
                         fontSize: 28,
@@ -60,11 +73,11 @@ class HomeScreen extends StatelessWidget {
                   Container(
                     clipBehavior: Clip.antiAlias,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
+                      borderRadius: BorderRadius.circular(100),
                     ),
                     child: const Image(
-                      image: AssetImage("assets/images/pfp.jpg"),
-                      height: 40,
+                      image: AssetImage("assets/images/pinwinasio.jpg"),
+                      height: 50,
                     ),
                   )
                 ],

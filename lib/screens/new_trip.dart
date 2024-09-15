@@ -1,12 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:vecto/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:vecto/screens/report.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
+
 class NewTripPage extends StatefulWidget {
   const NewTripPage({super.key});
+  
 
   @override
   State<NewTripPage> createState() => _NewTripPageState();
@@ -23,6 +26,15 @@ class _NewTripPageState extends State<NewTripPage> {
       return input.substring(9, input.length - 1).trim();
     }
     return input;
+  }
+
+  Future<void> savePrice(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+
+    final String key = 'vecto_${const Uuid().v4()}';
+    await prefs.setString(key, value);
+    print('Saved price with key: $key');
   }
 
   String trimNumber(String input) {
@@ -60,6 +72,7 @@ class _NewTripPageState extends State<NewTripPage> {
       );
       final report = trimMessage(json.decode(response.body).toString());
 
+
       final priceResponse = await http.post(
         Uri.parse(
           "http://127.0.0.1:5000/find_price",
@@ -75,6 +88,7 @@ class _NewTripPageState extends State<NewTripPage> {
         },
       );
       final price = trimNumber(json.decode(priceResponse.body).toString());
+      savePrice('$destination-$price');
 
       print(report);
       print(price);
